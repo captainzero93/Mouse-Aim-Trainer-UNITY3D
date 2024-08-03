@@ -11,7 +11,7 @@
 
 ## Getting Started
 
-- use one of the prebuilt releases
+- use one of the prebuilt releases or;
   
 ### Prerequisites
 
