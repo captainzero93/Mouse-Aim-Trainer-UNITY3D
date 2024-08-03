@@ -11,6 +11,8 @@
 
 ## Getting Started
 
+- use one of the prebuilt releases
+  
 ### Prerequisites
 
 - Unity 2020.3 or later
