@@ -29,21 +29,14 @@
 
 4. Press the Play button in the Unity Editor to start the game in the editor.
 
-### Building the Game
-
-To create a standalone build:
-
-1. Go to `File > Build Settings`.
-2. Select your target platform.
-3. Click 'Build' and choose a directory for the output.
-
 ## How to Play
 
 1. Start the game.
 2. Move your mouse to aim at the targets.
 3. Click to shoot the targets.
-4. Try to hit as many targets as possible before the timer runs out.
-5. Use the reset button to start a new session.
+4. Try to click as many targets as possible before the timer runs out.
+5. Missing counts as -1 point.
+6. Use the reset button to start a new session.
 
 ## Customization
 
