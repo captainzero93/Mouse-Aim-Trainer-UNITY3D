@@ -25,7 +25,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _scoreText;
     [SerializeField] private TextMeshProUGUI _timerText;
     [SerializeField] private float _gameDuration = 60f;
-    [SerializeField] private MonoBehaviour _targetSpawner;
+    [SerializeField] private TargetSpawner _targetSpawner;
 
     private int _score;
     private float _timeRemaining;
@@ -45,18 +45,23 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    private void Start()
+    {
+        ResetGame();
+    }
+
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         ResetGame();
     }
 
-    private void ResetGame()
+    public void ResetGame()
     {
         _score = 0;
         _timeRemaining = _gameDuration;
         _isGameOver = false;
 
-        // Find and assign UI elements in the new scene
+        // Find and assign UI elements in the scene
         _scoreText = GameObject.Find("ScoreText")?.GetComponent<TextMeshProUGUI>();
         _timerText = GameObject.Find("TimerText")?.GetComponent<TextMeshProUGUI>();
         _targetSpawner = FindObjectOfType<TargetSpawner>();
@@ -67,7 +72,21 @@ public class GameManager : MonoBehaviour
         if (_targetSpawner != null)
         {
             _targetSpawner.enabled = true;
+            _targetSpawner.ResetSpawner();
         }
+        else
+        {
+            Debug.LogError("TargetSpawner not found in the scene!");
+        }
+
+        // Destroy all existing targets
+        GameObject[] targets = GameObject.FindGameObjectsWithTag("Target");
+        foreach (GameObject target in targets)
+        {
+            Destroy(target);
+        }
+
+        Debug.Log("GameManager Reset");
     }
 
     private void Update()
@@ -108,12 +127,16 @@ public class GameManager : MonoBehaviour
     {
         if (_scoreText != null)
             _scoreText.text = "Score: " + _score;
+        else
+            Debug.LogWarning("ScoreText is null in GameManager");
     }
 
     private void UpdateTimerTextInstance()
     {
         if (_timerText != null)
             _timerText.text = "Time: " + Mathf.RoundToInt(_timeRemaining);
+        else
+            Debug.LogWarning("TimerText is null in GameManager");
     }
 
     private void EndGameInstance()

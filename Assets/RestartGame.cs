@@ -5,11 +5,23 @@ public class RestartGame : MonoBehaviour
 {
     public void ResetGame()
     {
-        // Reload the current scene
-        Scene currentScene = SceneManager.GetActiveScene();
-        SceneManager.LoadScene(currentScene.name);
+        // Stop all running coroutines
+        StopAllCoroutines();
 
-        // The GameManager will automatically reset its state when the scene is reloaded
+        // Reset time scale in case it was changed
+        Time.timeScale = 1f;
+
+        // Destroy all existing targets
+        GameObject[] targets = GameObject.FindGameObjectsWithTag("Target");
+        foreach (GameObject target in targets)
+        {
+            Destroy(target);
+        }
+
+        // Reset the GameManager
+        GameManager.Instance.ResetGame();
+
+        Debug.Log("Game Reset");
     }
 
 }

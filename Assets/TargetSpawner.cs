@@ -15,9 +15,27 @@ public class TargetSpawner : MonoBehaviour
 
     void Start()
     {
+        ResetSpawner();
+    }
+
+    public void ResetSpawner()
+    {
         nextSpawnTime = Time.time + spawnRate;
+        UpdateReferences();
+    }
+
+    void UpdateReferences()
+    {
         mainCamera = Camera.main;
+        if (mainCamera == null)
+        {
+            Debug.LogError("No main camera found in the scene!");
+        }
         mainCanvas = FindObjectOfType<Canvas>();
+        if (mainCanvas == null)
+        {
+            Debug.LogError("No canvas found in the scene!");
+        }
     }
 
     void Update()
@@ -31,6 +49,16 @@ public class TargetSpawner : MonoBehaviour
 
     void SpawnTarget()
     {
+        if (mainCamera == null || mainCanvas == null)
+        {
+            UpdateReferences();
+            if (mainCamera == null || mainCanvas == null)
+            {
+                Debug.LogError("Cannot spawn target: Camera or Canvas is missing.");
+                return;
+            }
+        }
+
         Vector2 spawnPosition;
         int attempts = 0;
         const int maxAttempts = 50;
@@ -58,12 +86,16 @@ public class TargetSpawner : MonoBehaviour
 
     bool IsOverlappingUI(Vector2 worldPosition)
     {
+        if (mainCamera == null || mainCanvas == null) return false;
+
         Vector2 screenPosition = mainCamera.WorldToScreenPoint(worldPosition);
 
         // Check if the position is within the safe zone of any UI element
         Graphic[] uiElements = mainCanvas.GetComponentsInChildren<Graphic>();
         foreach (Graphic ui in uiElements)
         {
+            if (ui == null) continue;
+
             RectTransform rectTransform = ui.rectTransform;
             Vector2 uiMin = rectTransform.TransformPoint(rectTransform.rect.min);
             Vector2 uiMax = rectTransform.TransformPoint(rectTransform.rect.max);
